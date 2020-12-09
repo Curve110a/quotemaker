@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Quotemaker</title>
+  <script type="text/javascript" src="//code.jquery.com/jquery-1.9.1.js"></script>
+  <script type="text/javascript">//<![CDATA[
+
+
+    var node = document.getElementById( 'output' );
+
+
+
+      //]]></script>
+
+  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="fontselect.css">
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"> -->
+  <link href="https://fonts.googleapis.com/css?family=Quicksand&display=swap" rel="stylesheet">
+  <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.11.2/css/all.css"
+    integrity="sha384-zrnmn8R8KkWl12rAZFt4yKjxplaDaT7/EUkKm7AovijfrQItFWR7O/JJn4DAa/gx" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.3/FileSaver.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="styles/fontselect-default.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <!-- For apple devices -->
+  <link rel="apple-touch-icon" type="image/png" href="/favicon.png" />
+  <script>
+    $( function ()
+    {
+      $( '#font' ).fontselect().change( function ()
+      {
+
+        // replace + signs with spaces for css
+        var font = $( this ).val().replace( /\+/g, ' ' );
+
+        // split font into family and weight
+        font = font.split( ':' );
+
+        // set family on paragraphs 
+        $( '#outputText' ).css( 'font-family', font[ 0 ] );
+        $( '#outputAuthor' ).css( 'font-family', font[ 0 ] );
+      } );
+    } );
+
+  </script>
+</head>
+
+<body>
+  <div id="overlayScreen" class="overlayScreen">
+    <div class="title">QuoteMAKER</div>
+    <div class="boldText">Start making your quotes today</div>
+    <!-- <div class="visitorsCounter">
+      <span class="counterText">Total Visitors:</span> <br>
+      <span>
+        <a class="hitCounter" target="_blank" rel="nofollow noopener"
+          data-name="b36ad3572b738fe0eafa0584bcbbf772|5|ip|1|#0373dd|#ffffff|small|ser-hit"></a>
+        <script>document.write("<script type='text/javascript' src='https://visitorshitcounter.com/js/hitCounter.js?v=" + Date.now() + "'><\/script>");</script>
+      </span>
+    </div> -->
+    <button class="beginButton" onclick="hideOverlay()">Begin</button>
+
+
+    <div class="footer">Made by: <a href="https://www.instagram.com/rick_horst/">@Rick_Horst</a></div>
+  </div>
+
+  <main id="main">
+
+
+    <div id="colorPickerContainer" class="colorPickerContainer">
+      <div onclick="popup(event)" class="backgroundPopup"></div>
+      <div class="colorpicker" id="colorpicker">
+        <span key="picker" class="picker" id="picker">
+          <a onclick="popup(event)" class="close"></a>
+          <h3 class="description">COLOR</h3>
+          <div class="swatch" id="color">
+          </div>
+          <div class="slider-container">
+            <input autocomplete="off" name="hue" type="range" min="1" max="300" value="1" class="slider hue" />
+          </div>
+
+      </div>
+    </div>
+
+
+
+    <div id="bar">
+      <i id="imageIcon" class="far fa-images tooltip"> <span class="tooltiptext">Background</span></i>
+      <i id="paletteIcon" class="fas fa-palette tooltip"><span class="tooltiptext">Color</span></i>
+      <i id="fontIcon" class="fas fa-font tooltip"><span class="tooltiptext">Text</span></i>
+      <i onclick="randomize()" id="randomIcon" class="fas fa-random tooltip"><span
+          class="tooltiptext">Randomize</span></i>
+      <i class="fas fa-undo-alt tooltip" onclick="resetQuote();"><span class="tooltiptext">Reset</span></i>
+
+    </div>
+
+    <form id="" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+      <input autocomplete="off" type="hidden" name="cmd" value="_s-xclick" />
+      <input autocomplete="off" type="hidden" name="hosted_button_id" value="PZQQZP3G62NCL" />
+      <button class="paypalButton tooltip"><i class="fab fa-paypal"><span class="tooltiptext">Donate</span></i></button>
+    </form>
+
+    <span id="screenshotArea" class="screenshotArea">
+      <!-- <canvas id="canvas" width="5" height="5"></canvas> -->
+      <!-- https://www.tutorialspoint.com/how-to-get-image-data-url-in-javascript#:~:text=To%20convert%20image%20from%20an,the%20toDataURL%20method%20on%20it. -->
+      <div class="wrapper" id="wrapper">
+        <div class="output">
+          <div class="outputContainer" id="output">
+            <span class="outputText" id="outputText"></span>
+            <img class="file-upload-image" src="#" alt=" " />
+
+            <div class="outputAuthor">
+              <div><span id="outputAuthor"></span></div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </span>
+
+
+    <div class="menu">
+      <div class="menuTitle">QuoteMAKER</div>
+      <div class="size">
+        <input autocomplete="off" class="width" id="inputWidth" oninput="changeWidth();" placeholder="Width..."
+          type="number" min="1" max="9999">px
+        <span class="sizeX"><i class="fas fa-times"></i></span>
+        <input autocomplete="off" class="height" id="inputHeight" oninput="changeHeight();" placeholder="Height..."
+          type="number" min="1" max="9999">px
+      </div>
+      <div id="quoteInput">
+        <input autocomplete="off" oninput="updateQuote()" placeholder="Type your quote here..." type="text" id="quote"
+          name="quote">
+      </div>
+      <div id="author">
+        <input autocomplete="off" oninput="updateAuthor()" placeholder="Who made this..." type="text" id="authorInput"
+          name="author">
+      </div>
+      <div class="backgroundMenu" id="backgroundMenu">
+        <div class="titleSubMenu">Background</div>
+        <div class="text1">Choose background <br> via link:</div>
+        <input autocomplete="off" oninput="setBackground()" id="urlInput" class="linkInput"
+          placeholder="Enter your link here..." type="text">
+        <div class="text2">or from a local image:</div>
+        <div class="file-upload">
+          <button class="file-upload-btn" type="button"
+            onclick="$('.file-upload-input').trigger( 'click' )"><span>choose
+              background</span></button>
+
+          <div class="image-upload-wrap">
+            <input autocomplete="off" class="file-upload-input" type='file' onchange="readURL(this);"
+              accept="image/*" />
+          </div>
+          <div class="file-upload-content">
+
+          </div>
+        </div>
+      </div>
+      <div class="colorMenu" id="colorMenu">
+        <div class="titleSubMenu">Color</div>
+        <div id="quoteColor">Quote color <span class="quotePalette" id="quotePalette" onclick="popup()"></span></div>
+        <div id="authorColor">Author color <span class="authorPalette" id="authorPalette"
+            onclick="popup();fromAuthor();"></span></div>
+        <div onclick="linkColors();">Link colors <input autocomplete="off" class="quotePalette" id="linkColors"
+            type="checkbox"></div>
+        <!-- <div id="backgroundColor">Quote color <span class="backgroundPalette"></span></div> -->
+        <!-- <div onclick="popup()" id="colorOutput">
+          <div id="colorPicker"></div>
+
+        </div> -->
+      </div>
+      <div class="textMenu" id="textMenu">
+        <div class="textMenuText">Text</div>
+        <div>
+          <div>Change font:</div> <br>
+          <input autocomplete="off" id="font" type="text" />
+        </div>
+        <!-- <span class="changeFontSize"> -->
+        <div id="fontSizeText">Font size: <br>
+          <input autocomplete="off" oninput="changeFont()" class="sliderFont" value="500" type="range" min="100"
+            max="1200" id="slider" step="1"></div>
+        <!-- </span> -->
+
+        <div id="fontSizeTextAuthor">Author font size: <br>
+          <input autocomplete="off" oninput="changeFontAuthor()" class="sliderFont" value="300" type="range" min="100"
+            max="500" id="slideAuthor" step="1"></div>
+
+      </div>
+      <div class="randomizeMenu" id="randomizeMenu">
+        <button onclick="randomize()" class="randomize" id="randomize">Randomize</button>
+      </div>
+
+      <button href="javascript:void(0);" id="download" onclick="generate();"><span>download</span></button>
+
+
+      <!-- <button id="reset" onclick="reset()">Reset</button> -->
+
+
+
+      <!-- <button id="flip" onclick="flip()">flip</button> -->
+
+    </div>
+  </main>
+
+
+  <!-- JS  -->
+  <script src="index.js"></script>
+  <script src="image.js"></script>
+  <script src="jquery.fontselect.js"></script>
+  <!-- JS -->
+</body>
+
+</html>
